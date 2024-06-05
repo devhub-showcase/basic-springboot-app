@@ -2,13 +2,13 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: thor
-  description: "avengers: thor"
+  name: batman
+  description: "dc: batman"
   annotations:
-    argocd/app-selector: "avengers-gitops=thor"
-    argocd/app-namespace: avengers-gitops
-    backstage.io/kubernetes-id: thor
-    backstage.io/kubernetes-label-selector: 'app.kubernetes.io/instance=thor'
+    argocd/app-selector: "dc-gitops=batman"
+    argocd/app-namespace: dc-gitops
+    backstage.io/kubernetes-id: batman
+    backstage.io/kubernetes-label-selector: 'app.kubernetes.io/instance=batman'
 spec:
   type: resources
   lifecycle: production
