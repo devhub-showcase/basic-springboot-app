@@ -12,7 +12,7 @@ metadata:
     backstage.io/kubernetes-label-selector: 'app.kubernetes.io/instance=basic-springboot-app'
     sonarqube.org/project-key: ci-pipeline-ref-basic-springboot-app
   links:
-    - url: https://devspaces.apps.dev-acm.v3socp.boo/#https://github.com/devhub-showcase/basic-springboot-app?che-editor=che-incubator/che-code/insiders&devfilePath=.devfile-vscode.yaml
+    - url: https://devspaces.apps.dev-acm.v3socp.boo/#https://github.com/devhub-showcase/basic-springboot-app?devfilePath=.devfile-vscode.yaml
       title: CodeReady Workspaces (VS Code)
       icon: web
 spec:
