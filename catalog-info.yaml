@@ -5,8 +5,8 @@ metadata:
   name: basic-springboot-app
   description: "team-uno: basic-springboot-app"
   annotations:
-    argocd/app-selector: "team-uno-gitops=basic-springboot-app"
-    argocd/app-namespace: team-uno-gitops
+    argocd/app-selector: "team-uno-cicd=basic-springboot-app"
+    argocd/app-namespace: team-uno-cicd
     janus-idp.io/tekton: basic-springboot-app
     backstage.io/kubernetes-id: basic-springboot-app
     backstage.io/kubernetes-label-selector: 'app.kubernetes.io/instance=basic-springboot-app'
