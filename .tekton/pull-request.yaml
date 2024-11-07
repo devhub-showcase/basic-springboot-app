@@ -47,7 +47,8 @@ spec:
           - name: subdirectory
             value: $(params.repo_name)
       - name: s2i-build
-        taskRef:name: s2i-java-1-16-0
+        taskRef:
+          name: s2i-java-1-16-0
           kind: ClusterTask
         runAfter:
           - fetch-repository
