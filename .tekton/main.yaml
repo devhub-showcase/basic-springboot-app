@@ -1,0 +1,73 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: basic-springboot-app-main
+  annotations:
+    pipelinesascode.tekton.dev/on-target-branch: "[main]"
+    pipelinesascode.tekton.dev/on-event: "[push]"
+    pipelinesascode.tekton.dev/max-keep-runs: "5"
+spec:
+  params:
+    - name: repo_url
+      value: "{{ repo_url }}"
+    - name: revision
+      value: "{{ revision }}"
+    - name: repo_name
+      value: "{{ repo_name }}"
+  pipelineSpec:
+    params:
+      - name: repo_url
+      - name: revision
+      - name: repo_name
+    workspaces:
+      - name: source
+      - name: basic-auth
+      - name: dockerconfig
+    tasks:
+      - name: fetch-repository
+        taskRef:
+          name: git-clone
+          kind: ClusterTask
+        workspaces:
+          - name: output
+            workspace: source
+          - name: basic-auth
+            workspace: basic-auth
+        params:
+          - name: url
+            value: $(params.repo_url)
+          - name: revision
+            value: $(params.revision)
+          - name: subdirectory
+            value: $(params.repo_name)
+      - name: s2i-build
+        taskRef:name: s2i-java-1-16-0
+          kind: ClusterTask
+        runAfter:
+          - fetch-repository
+        params:
+        - name: PATH_CONTEXT
+          value:  $(workspaces.source.path)/$(params.repo_name)
+        - name: IMAGE
+          value: "quay.io/rhn_gps_vpogu/$(params.repo_name):$(params.revision)"
+        workspaces:
+          - name: source
+            workspace: source
+          - name: dockerconfig
+            workspace: dockerconfig
+  workspaces:
+  - name: source
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+  - name: basic-auth
+    secret:
+      secretName: "{{ git_auth_secret }}"
+  - name: dockerconfig
+    secret:
+      secretName: "pipeline-build-secret"
