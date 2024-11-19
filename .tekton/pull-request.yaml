@@ -17,6 +17,8 @@ spec:
       value: "{{ repo_name }}"
     - name: source_branch
       value: "{{ source_branch }}"
+    - name: pull_request
+      value: "{{ pull_request_number }}"
     - name: namespace
       value: team-a-dev
   pipelineSpec:
@@ -32,8 +34,14 @@ spec:
     tasks:
       - name: fetch-repository
         taskRef:
-          name: git-clone
-          kind: ClusterTask
+          resolver: cluster
+          params:
+            - name: name
+              value: git-clone
+            - name: namespace
+              value: openshift-pipelines
+            - name: kind
+              value: task
         workspaces:
           - name: output
             workspace: source
@@ -48,8 +56,14 @@ spec:
             value: $(params.repo_name)
       - name: s2i-build
         taskRef:
-          name: s2i-java-1-16-0
-          kind: ClusterTask
+          resolver: cluster
+          params:
+            - name: name
+              value: s2i-java-1-16-0
+            - name: namespace
+              value: openshift-pipelines
+            - name: kind
+              value: task
         runAfter:
           - fetch-repository
         params:
@@ -64,8 +78,14 @@ spec:
             workspace: source
       - name: fetch-helm-chart-repository
         taskRef:
-          name: git-clone
-          kind: ClusterTask
+          resolver: cluster
+          params:
+            - name: name
+              value: git-clone
+            - name: namespace
+              value: openshift-pipelines
+            - name: kind
+              value: task
         runAfter:
           - s2i-build
         workspaces:
@@ -79,13 +99,19 @@ spec:
           - name: subdirectory
             value: "shared-helm-charts"
           - name: url
-            value: 
+            value: https://github.com/devhub-showcase/shared-helm-charts
           - name: revision
             value: main
       - name: install-helm-chart
         taskRef:
-          name: helm-upgrade-from-source
-          kind: ClusterTask
+          resolver: cluster
+          params:
+            - name: name
+              value: helm-upgrade-from-source
+            - name: namespace
+              value: openshift-pipelines
+            - name: kind
+              value: task
         runAfter:
           - fetch-helm-chart-repository
         workspaces:
@@ -95,11 +121,11 @@ spec:
           - name: release_namespace
             value: $(params.namespace)
           - name: release_name
-            value: $(params.repo_name)-$(params.source_branch)
+            value: $(params.repo_name)-pull-request-$(params.pull_request)
           - name: charts_dir
             value: "$(workspaces.source.path)/shared-helm-charts/charts/deploy"
           - name: overwrite_values
-            value: image.repository=image-registry.openshift-image-registry.svc:5000/$(params.namespace)/$(params.repo_name),image.tag=$(params.source_branch)
+            value: image.repository=image-registry.openshift-image-registry.svc:5000/$(params.namespace)/$(params.repo_name),image.tag=$(params.pull_request)
   workspaces:
   - name: source
     volumeClaimTemplate:
