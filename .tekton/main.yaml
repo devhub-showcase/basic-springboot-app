@@ -15,6 +15,8 @@ spec:
       value: "{{ revision }}"
     - name: repo_name
       value: "{{ repo_name }}"
+    - name: namespace
+      value: team-a-dev
   pipelineSpec:
     params:
       - name: repo_url
@@ -27,8 +29,14 @@ spec:
     tasks:
       - name: fetch-repository
         taskRef:
-          name: git-clone
-          kind: ClusterTask
+          resolver: cluster
+          params:
+            - name: name
+              value: git-clone
+            - name: namespace
+              value: openshift-pipelines
+            - name: kind
+              value: task
         workspaces:
           - name: output
             workspace: source
@@ -43,8 +51,14 @@ spec:
             value: $(params.repo_name)
       - name: s2i-build
         taskRef:
-          name: s2i-java-1-16-0
-          kind: ClusterTask
+          resolver: cluster
+          params:
+            - name: name
+              value: s2i-java-1-16-0
+            - name: namespace
+              value: openshift-pipelines
+            - name: kind
+              value: task
         runAfter:
           - fetch-repository
         params:
@@ -57,6 +71,21 @@ spec:
             workspace: source
           - name: dockerconfig
             workspace: dockerconfig
+      - name: helm-cleanup
+        taskRef:
+          resolver: cluster
+          params:
+            - name: name
+              value: helm-uninstall
+            - name: namespace
+              value: openshift-pipelines
+            - name: kind
+              value: task
+        runAfter:
+          - s2i-build
+        params:
+          - name: release_namespace
+            value:  $(params.namespace)
   workspaces:
   - name: source
     volumeClaimTemplate:
