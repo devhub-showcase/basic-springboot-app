@@ -99,8 +99,6 @@ spec:
           value: "image-registry.openshift-image-registry.svc:5000/$(params.namespace)/$(params.repo_name):$(params.source_branch)"
         - name: insecure-skip-tls-verify
           value: "true" # stackrox to OCP image registry x509 fail...
-        - name: rox_token_file
-          value: $(params.rox_token_file)
         runAfter:
           - s2i-build
       - name: fetch-helm-chart-repository
