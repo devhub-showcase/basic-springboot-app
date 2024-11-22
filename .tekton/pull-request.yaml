@@ -76,6 +76,48 @@ spec:
         workspaces:
           - name: source
             workspace: source
+      - name: rhacs-authenticate
+        runAfter:
+          - s2i-build
+        taskRef:
+          resolver: cluster
+          params:
+            - name: name
+              value: rhacs-m2m-authenticate
+            - name: namespace
+              value: openshift-pipelines
+            - name: kind
+              value: task
+        params:
+          - name: insecure-skip-tls-verify
+            value: "true"
+          - name: rox_config_dir
+            value: $(params.rox_config_dir)
+        workspaces:
+          - name: roxctl-config
+            workspace: source
+      - name: scan-image
+        taskRef:
+          resolver: cluster
+          params:
+            - name: name
+              value: rhacs-image-scan
+            - name: namespace
+              value: openshift-pipelines
+            - name: kind
+              value: task
+        workspaces:
+        - name: roxctl-config
+          workspace: source
+        params:
+        - name: image
+          value: "image-registry.openshift-image-registry.svc:5000/$(params.namespace)/$(params.repo_name):$(params.source_branch)"
+        - name: insecure-skip-tls-verify
+          value: "true" # stackrox to OCP image registry x509 fail...
+        - name: rox_config_dir
+          value: $(params.rox_config_dir)
+        runAfter:
+          - rhacs-authenticate
       - name: fetch-helm-chart-repository
         taskRef:
           resolver: cluster
@@ -87,7 +129,7 @@ spec:
             - name: kind
               value: task
         runAfter:
-          - s2i-build
+          - scan-image
         workspaces:
           - name: output
             workspace: source
