@@ -63,8 +63,8 @@ spec:
           - fetch-repository
         params:
         - name: VERSION
-          value: "11"
-        - name: PATH_CONTEXT
+          value: openjdk-11-ubi8
+        - name: CONTEXT
           value:  $(workspaces.source.path)/$(params.repo_name)
         - name: IMAGE
           value: "quay.io/rhn_gps_vpogu/$(params.repo_name):$(params.revision)"

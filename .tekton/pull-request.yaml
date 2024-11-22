@@ -68,8 +68,8 @@ spec:
           - fetch-repository
         params:
         - name: VERSION
-          value: "11"
-        - name: PATH_CONTEXT
+          value: openjdk-11-ubi8
+        - name: CONTEXT
           value:  $(workspaces.source.path)/$(params.repo_name)
         - name: IMAGE
           value: "image-registry.openshift-image-registry.svc:5000/$(params.namespace)/$(params.repo_name):$(params.source_branch)"
