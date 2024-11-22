@@ -62,6 +62,8 @@ spec:
         runAfter:
           - fetch-repository
         params:
+        - name: VERSION
+          value: openjdk-11-ubi8
         - name: PATH_CONTEXT
           value:  $(workspaces.source.path)/$(params.repo_name)
         - name: IMAGE
