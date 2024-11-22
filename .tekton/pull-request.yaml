@@ -59,7 +59,7 @@ spec:
           resolver: cluster
           params:
             - name: name
-              value: s2i-java-1-16-0
+              value: s2i-1-16-0
             - name: namespace
               value: openshift-pipelines
             - name: kind
@@ -69,7 +69,9 @@ spec:
         params:
         - name: VERSION
           value: openjdk-11-ubi8
-        - name: CONTEXT
+        - name: RUNTIME
+          value: java
+        - name: PATH_CONTEXT
           value:  $(workspaces.source.path)/$(params.repo_name)
         - name: IMAGE
           value: "image-registry.openshift-image-registry.svc:5000/$(params.namespace)/$(params.repo_name):$(params.source_branch)"
