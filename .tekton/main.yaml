@@ -63,7 +63,7 @@ spec:
           - fetch-repository
         params:
         - name: VERSION
-          value: openjdk-11-ubi8
+          value: openjdk-17-ubi8
         - name: RUNTIME
           value: java
         - name: PATH_CONTEXT
