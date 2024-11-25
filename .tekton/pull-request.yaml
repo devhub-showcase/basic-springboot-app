@@ -68,16 +68,17 @@ spec:
         runAfter:
           - fetch-repository
         params:
-        - name: VERSION
-          value: openjdk-17-ubi8
-        - name: RUNTIME
-          value: java
-        - name: PATH_CONTEXT
-          value:  $(workspaces.source.path)/$(params.repo_name)
-        - name: IMAGE
-          value: "image-registry.openshift-image-registry.svc:5000/$(params.namespace)/$(params.repo_name):$(params.pull_request)"
-        - name: TLSVERIFY
-          value: "false"
+          - name: VERSION
+            value: openjdk-17-ubi8
+            
+          - name: RUNTIME
+            value: java
+          - name: PATH_CONTEXT
+            value:  $(workspaces.source.path)/$(params.repo_name)
+          - name: IMAGE
+            value: "image-registry.openshift-image-registry.svc:5000/$(params.namespace)/$(params.repo_name):$(params.pull_request)"
+          - name: TLSVERIFY
+            value: "false"
         workspaces:
           - name: source
             workspace: source
