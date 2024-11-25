@@ -49,11 +49,11 @@ spec:
           - name: basic-auth
             workspace: basic-auth
         params:
-          - name: URL
+          - name: url
             value: $(params.repo_url)
-          - name: REVISION
+          - name: revision
             value: $(params.revision)
-          - name: SUBDIRECTORY
+          - name: subdirectory
             value: $(params.repo_name)
       - name: s2i-build
         taskRef:
@@ -68,16 +68,14 @@ spec:
         runAfter:
           - fetch-repository
         params:
-        - name: VERSION
-          value: openjdk-17-ubi8
-        - name: RUNTIME
-          value: java
-        - name: PATH_CONTEXT
-          value:  $(workspaces.source.path)/$(params.repo_name)
-        - name: IMAGE
-          value: "image-registry.openshift-image-registry.svc:5000/$(params.namespace)/$(params.repo_name):$(params.pull_request)"
-        - name: TLSVERIFY
-          value: "false"
+          - name: VERSIONvalue: openjdk-11-ubi8
+          - name: RUNTIMEvalue: java
+          - name: PATH_CONTEXT
+            value:  $(workspaces.source.path)/$(params.repo_name)
+          - name: IMAGE
+            value: "image-registry.openshift-image-registry.svc:5000/$(params.namespace)/$(params.repo_name):$(params.pull_request)"
+          - name: TLSVERIFY
+            value: "false"
         workspaces:
           - name: source
             workspace: source
@@ -121,11 +119,11 @@ spec:
         params:
           - name: PARAM_DELETE_EXISTING
             value: "false"
-          - name: SUBDIRECTORY
+          - name: subdirectory
             value: "shared-helm-charts"
-          - name: URL
+          - name: url
             value: https://github.com/devhub-showcase/shared-helm-charts
-          - name: REVISION
+          - name: revision
             value: main
       - name: install-helm-chart
         taskRef:

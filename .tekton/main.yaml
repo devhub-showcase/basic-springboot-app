@@ -43,11 +43,11 @@ spec:
           - name: basic-auth
             workspace: basic-auth
         params:
-          - name: URL
+          - name: url
             value: $(params.repo_url)
-          - name: REVISION
+          - name: revision
             value: $(params.revision)
-          - name: SUBDIRECTORY
+          - name: subdirectory
             value: $(params.repo_name)
       - name: s2i-build
         taskRef:
@@ -62,10 +62,8 @@ spec:
         runAfter:
           - fetch-repository
         params:
-        - name: VERSION
-          value: openjdk-17-ubi8
-        - name: RUNTIME
-          value: java
+        - name: VERSIONvalue: openjdk-11-ubi8
+        - name: RUNTIMEvalue: java
         - name: PATH_CONTEXT
           value:  $(workspaces.source.path)/$(params.repo_name)
         - name: IMAGE
