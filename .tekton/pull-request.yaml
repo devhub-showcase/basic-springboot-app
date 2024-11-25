@@ -75,7 +75,7 @@ spec:
         - name: PATH_CONTEXT
           value:  $(workspaces.source.path)/$(params.repo_name)
         - name: IMAGE
-          value: "image-registry.openshift-image-registry.svc:5000/$(params.namespace)/$(params.repo_name):$(params.source_branch)"
+          value: "image-registry.openshift-image-registry.svc:5000/$(params.namespace)/$(params.repo_name):$(params.pull_request)"
         - name: TLSVERIFY
           value: "false"
         workspaces:
@@ -96,7 +96,7 @@ spec:
             workspace: rox-api-token-auth
         params:
         - name: image
-          value: "image-registry.openshift-image-registry.svc:5000/$(params.namespace)/$(params.repo_name):$(params.source_branch)"
+          value: "image-registry.openshift-image-registry.svc:5000/$(params.namespace)/$(params.repo_name):$(params.pull_request)"
         - name: insecure-skip-tls-verify
           value: "true" # stackrox to OCP image registry x509 fail...
         runAfter:
